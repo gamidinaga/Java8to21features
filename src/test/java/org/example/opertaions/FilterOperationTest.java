@@ -11,7 +11,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class FilerOperationTest {
+public class FilterOperationTest {
     static FilterOperation fl;
     static List<String> list;
     @BeforeAll
