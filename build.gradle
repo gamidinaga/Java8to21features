@@ -1,6 +1,7 @@
 plugins {
     id 'application'
-    id 'java'
+    id 'jacoco'
+
 }
 
 mainClassName='Java8StreamApi'
@@ -15,14 +16,42 @@ repositories {
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
-    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.9.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.9.1' //for backward compatibility
 }
 
 test {
-    useJUnitPlatform()
-    //testLogging.showStandardStreams=true
+    useJUnitPlatform() //to lunch junit platform in jvm to run test cases.
+
     filter {
         includeTestsMatching("**Test")
     }
+    testLogging {
+        events "passed", "skipped", "failed"   //to show up the test methods status on console
+        showStandardStreams(false) //if true above events will not be applied
+    }
+
 
 }
+tasks.register('filterTestReport')/*
+jacoco {
+    applyTo run
+}*/
+/*tasks.register('applicationCodeCoverageReport', JacocoReport) {
+    executionData run
+    sourceSets sourceSets.main
+}*/
+filterTestReport {
+    jacocoTestReport{
+        group 'filterGroup'
+        description 'Generating FilterTest Cases Report'
+        reports {
+            xml.required = false
+            csv.required = false
+            html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+        }
+    }
+
+}
+
+//test.doLast filterTestReport.&execute
+//build
